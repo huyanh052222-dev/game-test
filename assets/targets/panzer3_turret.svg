@@ -1,0 +1,67 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 130" width="240" height="130">
+  <defs>
+    <linearGradient id="pzTurretGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#4a4f54"/>
+      <stop offset="55%" stop-color="#5f656b"/>
+      <stop offset="100%" stop-color="#6b7279"/>
+    </linearGradient>
+    <linearGradient id="pzBarrelGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#3a3e42"/>
+      <stop offset="35%" stop-color="#6c7278"/>
+      <stop offset="70%" stop-color="#52575c"/>
+      <stop offset="100%" stop-color="#2e3235"/>
+    </linearGradient>
+  </defs>
+
+  <!-- PANZER III AUSF. L TURRET (Hexagonal turret, Rommelkiste bin, 5cm KwK 39 L/60) -->
+  <g id="pz-turret">
+    <!-- Subtle turret shadow on hull roof -->
+    <polygon points="75,39 112,29 156,29 176,47 176,85 156,103 112,103 75,93" fill="#000000" opacity="0.28" transform="translate(-2, 2)"/>
+
+    <!-- Rear Turret Stowage Bin (Rommelkiste) with straps -->
+    <path d="M 54,48 L 76,45 L 76,85 L 54,82 Q 46,65 54,48 Z" fill="#4d5257" stroke="#1c1e20" stroke-width="1.1"/>
+    <line x1="60" y1="47" x2="60" y2="83" stroke="#2c3033" stroke-width="1.1"/>
+    <line x1="70" y1="46" x2="70" y2="84" stroke="#2c3033" stroke-width="1.1"/>
+
+    <!-- Chamfered Hexagonal Turret Body -->
+    <polygon points="75,38 112,28 156,28 176,46 176,84 156,102 112,102 75,92" fill="url(#pzTurretGrad)" stroke="#181a1c" stroke-width="1.3"/>
+
+    <!-- Turret Roof Plate + edge highlight -->
+    <polygon points="84,44 114,37 154,37 166,48 166,82 154,93 114,93 84,86" fill="#61676d" stroke="#292d30" stroke-width="0.9"/>
+    <polyline points="85,44 114,37 154,37" fill="none" stroke="#858c94" stroke-width="0.7" opacity="0.45"/>
+
+    <!-- Sloped Turret Side Escape Hatches (top & bottom cheeks) -->
+    <rect x="115" y="29.5" width="22" height="7" rx="1.2" transform="rotate(-12 126 33)" fill="#52575c" stroke="#222528" stroke-width="0.8"/>
+    <rect x="115" y="93.5" width="22" height="7" rx="1.2" transform="rotate(12 126 97)" fill="#52575c" stroke="#222528" stroke-width="0.8"/>
+
+    <!-- Commander's Cupola with 5 armored vision slits -->
+    <circle cx="96" cy="65" r="14" fill="#4f5459" stroke="#1a1c1e" stroke-width="1.2"/>
+    <circle cx="96" cy="65" r="10" fill="#63696f" stroke="#25282b" stroke-width="0.9"/>
+    <line x1="96" y1="55" x2="96" y2="75" stroke="#25282b" stroke-width="1.1"/>
+    <g fill="#5b7f8c" stroke="#1a1c1e" stroke-width="0.4">
+      <rect x="106.5" y="63.5" width="2.2" height="3"/>
+      <rect x="102" y="55" width="2.5" height="2" transform="rotate(45 103 56)"/>
+      <rect x="102" y="73" width="2.5" height="2" transform="rotate(-45 103 74)"/>
+      <rect x="94.5" y="52.2" width="3" height="1.8"/>
+      <rect x="94.5" y="76" width="3" height="1.8"/>
+    </g>
+
+    <!-- Roof vents & loader port -->
+    <circle cx="122" cy="48" r="4.5" fill="#4d5257" stroke="#1f2224" stroke-width="0.8"/>
+    <circle cx="122" cy="82" r="4.5" fill="#4d5257" stroke="#1f2224" stroke-width="0.8"/>
+    <circle cx="136" cy="61" r="5" fill="#575d63" stroke="#1f2224" stroke-width="0.8"/>
+
+    <!-- 57mm + 20mm Spaced External Gun Mantlet -->
+    <rect x="168" y="50" width="12" height="30" rx="2.5" fill="#565b60" stroke="#1a1c1e" stroke-width="1.1"/>
+    <rect x="177" y="53" width="4" height="24" rx="1" fill="#646a70" stroke="#1a1c1e" stroke-width="0.8"/>
+
+    <!-- 5cm KwK 39 L/60 Gun Barrel + Recuperator Collar -->
+    <rect x="179" y="61.2" width="8" height="7.6" rx="0.8" fill="#484d52" stroke="#181a1c" stroke-width="0.8"/>
+    <polygon points="185,62.3 227,63.0 227,67.0 185,67.7" fill="url(#pzBarrelGrad)" stroke="#16181a" stroke-width="0.9"/>
+    <line x1="187" y1="63.5" x2="225" y2="63.9" stroke="#9aa2ab" stroke-width="0.55" opacity="0.55"/>
+    <rect x="226.2" y="63.4" width="1.6" height="3.2" fill="#0d0f10"/>
+
+    <!-- Coaxial MG 34 port beside main gun -->
+    <rect x="180" y="70.5" width="7" height="2.2" rx="0.4" fill="#2d3135" stroke="#141618" stroke-width="0.6"/>
+  </g>
+</svg>

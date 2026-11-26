@@ -1,0 +1,120 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 130" width="240" height="130">
+  <defs>
+    <!-- Wehrmacht Dunkelgrau (Panzer Grey) Gradients -->
+    <linearGradient id="pzHullGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#414549"/>
+      <stop offset="50%" stop-color="#54595e"/>
+      <stop offset="100%" stop-color="#60666c"/>
+    </linearGradient>
+    <linearGradient id="pzFenderGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#464a4e"/>
+      <stop offset="50%" stop-color="#595e63"/>
+      <stop offset="100%" stop-color="#3f4347"/>
+    </linearGradient>
+    <linearGradient id="pzTurretGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#4a4f54"/>
+      <stop offset="55%" stop-color="#5f656b"/>
+      <stop offset="100%" stop-color="#6b7279"/>
+    </linearGradient>
+    <linearGradient id="pzBarrelGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#3a3e42"/>
+      <stop offset="35%" stop-color="#6c7278"/>
+      <stop offset="70%" stop-color="#52575c"/>
+      <stop offset="100%" stop-color="#2e3235"/>
+    </linearGradient>
+    <pattern id="pzLouver" width="4" height="3" patternUnits="userSpaceOnUse">
+      <rect width="4" height="3" fill="#232629"/>
+      <line x1="0" y1="1.5" x2="4" y2="1.5" stroke="#484d52" stroke-width="0.9"/>
+    </pattern>
+    <radialGradient id="pzSoot" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#141516" stop-opacity="0.6"/>
+      <stop offset="100%" stop-color="#141516" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <!-- LEFT FENDER & TRACK (-Y / Port side) -->
+  <g id="pz-fender-left">
+    <!-- Track edges visible at front & rear of fender -->
+    <rect x="19" y="13" width="202" height="16" fill="#202326" stroke="#121415" stroke-width="0.9"/>
+    <rect x="20" y="12" width="200" height="18" fill="url(#pzFenderGrad)" stroke="#1c1e20" stroke-width="1.1"/>
+    <rect x="20" y="12" width="12" height="18" fill="#4f5459" stroke="#1e2022" stroke-width="0.9"/>
+    <rect x="208" y="12" width="12" height="18" fill="#4f5459" stroke="#1e2022" stroke-width="0.9"/>
+    <g stroke="#2a2d30" stroke-width="1">
+      <line x1="60" y1="12" x2="60" y2="30"/>
+      <line x1="95" y1="12" x2="95" y2="30"/>
+      <line x1="130" y1="12" x2="130" y2="30"/>
+      <line x1="165" y1="12" x2="165" y2="30"/>
+      <line x1="198" y1="12" x2="198" y2="30"/>
+    </g>
+    <line x1="22" y1="13" x2="218" y2="13" stroke="#787e85" stroke-width="0.6" opacity="0.45"/>
+    <!-- Two spare road wheels mounted on left fender -->
+    <g fill="#363a3e" stroke="#181a1c" stroke-width="1">
+      <circle cx="42" cy="19" r="7.5"/>
+      <circle cx="42" cy="19" r="3.5" fill="#54595e"/>
+      <circle cx="136" cy="19" r="7.5"/>
+      <circle cx="136" cy="19" r="3.5" fill="#54595e"/>
+    </g>
+    <!-- Wire cutters & jack on front-left fender -->
+    <rect x="164" y="16" width="18" height="4" rx="1" fill="#3a3d40" stroke="#1a1c1e" stroke-width="0.7"/>
+    <!-- Notek blackout headlight -->
+    <circle cx="195" cy="19" r="3.2" fill="#45494d" stroke="#181a1c" stroke-width="0.8"/>
+    <rect x="195.5" y="17.8" width="2.2" height="2.4" fill="#c7d0c4" opacity="0.75"/>
+  </g>
+
+  <!-- RIGHT FENDER & TRACK (+Y / Starboard side) -->
+  <g id="pz-fender-right">
+    <rect x="19" y="101" width="202" height="16" fill="#202326" stroke="#121415" stroke-width="0.9"/>
+    <rect x="20" y="100" width="200" height="18" fill="url(#pzFenderGrad)" stroke="#1c1e20" stroke-width="1.1"/>
+    <rect x="20" y="100" width="12" height="18" fill="#4f5459" stroke="#1e2022" stroke-width="0.9"/>
+    <rect x="208" y="100" width="12" height="18" fill="#4f5459" stroke="#1e2022" stroke-width="0.9"/>
+    <g stroke="#2a2d30" stroke-width="1">
+      <line x1="60" y1="100" x2="60" y2="118"/>
+      <line x1="95" y1="100" x2="95" y2="118"/>
+      <line x1="130" y1="100" x2="130" y2="118"/>
+      <line x1="165" y1="100" x2="165" y2="118"/>
+      <line x1="198" y1="100" x2="198" y2="118"/>
+    </g>
+    <!-- Radio antenna rail & pioneer tools along right fender -->
+    <rect x="35" y="105" width="76" height="3.2" rx="0.8" fill="#3c4044" stroke="#1a1c1e" stroke-width="0.7"/>
+    <rect x="108" y="104" width="32" height="2.4" rx="0.6" fill="#464a4f" stroke="#1a1c1e" stroke-width="0.6"/>
+    <rect x="155" y="106" width="20" height="3" rx="0.6" fill="#5e4a36" stroke="#1a1c1e" stroke-width="0.6"/>
+  </g>
+
+  <!-- MAIN BOXY HULL BODY (Panzer III Ausf. L) -->
+  <g id="pz-hull">
+    <rect x="24" y="30" width="194" height="70" fill="url(#pzHullGrad)" stroke="#181a1c" stroke-width="1.3"/>
+    <!-- Subtle armor plate joint lines & hull weathering -->
+    <line x1="96" y1="30" x2="96" y2="100" stroke="#2c2f33" stroke-width="0.9"/>
+    <line x1="168" y1="30" x2="168" y2="100" stroke="#2c2f33" stroke-width="1.1"/>
+    <path d="M 102,32 L 164,32 L 164,38 L 102,38 Z" fill="#464b50" opacity="0.5"/>
+
+    <!-- Rear exhaust box & soot halo -->
+    <circle cx="19" cy="65" r="9" fill="url(#pzSoot)"/>
+    <rect x="17" y="54" width="7" height="22" rx="1" fill="#3b3f43" stroke="#181a1c" stroke-width="1"/>
+
+    <!-- Rear Maybach Engine Deck: recessed louvered air intake grilles & twin access hatches -->
+    <rect x="30" y="34" width="14" height="22" rx="1.5" fill="url(#pzLouver)" stroke="#222528" stroke-width="0.9"/>
+    <rect x="30" y="74" width="14" height="22" rx="1.5" fill="url(#pzLouver)" stroke="#222528" stroke-width="0.9"/>
+    <rect x="50" y="35" width="34" height="26" rx="2" fill="#50555a" stroke="#222528" stroke-width="1"/>
+    <rect x="50" y="69" width="34" height="26" rx="2" fill="#50555a" stroke="#222528" stroke-width="1"/>
+    <ellipse cx="67" cy="48" rx="6" ry="5" fill="#222528" opacity="0.22"/>
+
+    <!-- Front Transmission Access Hatches (twin hinged plates) -->
+    <rect x="184" y="37" width="20" height="23" rx="1.5" fill="#595e63" stroke="#222528" stroke-width="0.9"/>
+    <rect x="184" y="70" width="20" height="23" rx="1.5" fill="#595e63" stroke="#222528" stroke-width="0.9"/>
+    <!-- Ausf. L 20mm spaced front glacis plate with mounting bolts -->
+    <rect x="213" y="32" width="5" height="66" rx="0.8" fill="#63696f" stroke="#1c1e20" stroke-width="0.9"/>
+    <circle cx="215.5" cy="36" r="1" fill="#232629"/>
+    <circle cx="215.5" cy="94" r="1" fill="#232629"/>
+
+    <!-- Driver armored visor (with glass slit) & Bow MG 34 ball mount -->
+    <rect x="174" y="40" width="6" height="14" rx="1" fill="#32363a" stroke="#181a1c" stroke-width="0.8"/>
+    <rect x="177.8" y="42" width="1.6" height="10" fill="#5e7f8c"/>
+    <circle cx="177" cy="81" r="4.2" fill="#3e4246" stroke="#181a1c" stroke-width="0.8"/>
+    <rect x="179" y="80" width="5" height="2" fill="#242729"/>
+
+    <!-- Front tow shackles -->
+    <rect x="216" y="37" width="6" height="5" rx="1" fill="#3f4347" stroke="#181a1c" stroke-width="0.7"/>
+    <rect x="216" y="88" width="6" height="5" rx="1" fill="#3f4347" stroke="#181a1c" stroke-width="0.7"/>
+  </g>
+</svg>

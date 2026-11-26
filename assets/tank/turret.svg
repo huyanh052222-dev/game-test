@@ -1,0 +1,100 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 140 120" width="140" height="120">
+  <defs>
+    <linearGradient id="turretBodyGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#374729"/>
+      <stop offset="55%" stop-color="#4b5e38"/>
+      <stop offset="100%" stop-color="#586d42"/>
+    </linearGradient>
+    <linearGradient id="turretRoofGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#445633"/>
+      <stop offset="45%" stop-color="#5a7044"/>
+      <stop offset="100%" stop-color="#3e4f2f"/>
+    </linearGradient>
+    <linearGradient id="mantletGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#38482a"/>
+      <stop offset="65%" stop-color="#586e43"/>
+      <stop offset="100%" stop-color="#465935"/>
+    </linearGradient>
+    <radialGradient id="domeGrad" cx="40%" cy="40%" r="60%">
+      <stop offset="0%" stop-color="#657c4f"/>
+      <stop offset="100%" stop-color="#344327"/>
+    </radialGradient>
+    <filter id="castArmorGrain" x="0%" y="0%" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.45" numOctaves="2" result="noise"/>
+      <feColorMatrix type="matrix" values="0 0 0 0 0.18  0 0 0 0 0.22  0 0 0 0 0.14  0 0 0 0.14 0" in="noise" result="tinted"/>
+      <feComposite in="tinted" in2="SourceGraphic" operator="atop"/>
+    </filter>
+  </defs>
+
+  <!-- Turret shadow on hull deck -->
+  <path d="M 18,36 Q 34,20 62,18 Q 90,22 108,38 L 114,48 L 114,72 L 108,82 Q 90,98 62,102 Q 34,100 18,84 Q 12,60 18,36 Z" fill="#000000" opacity="0.34" transform="translate(-2, 2)"/>
+
+  <!-- Cast Turret Lower Cheek & Side Armor -->
+  <path d="M 18,35 Q 32,21 62,19 Q 88,23 106,39 L 111,46 L 111,74 L 106,81 Q 88,97 62,101 Q 32,99 18,85 Q 11,60 18,35 Z" fill="url(#turretBodyGrad)" stroke="#161d10" stroke-width="1.35" filter="url(#castArmorGrain)"/>
+
+  <!-- Subtle 4BO Paint Aging & Weathering Patches -->
+  <path d="M 28,32 Q 52,22 72,30 Q 65,45 45,42 Z" fill="#2d3a21" opacity="0.45"/>
+  <path d="M 60,96 Q 82,86 96,76 L 102,82 Q 86,96 60,96 Z" fill="#2b3720" opacity="0.45"/>
+  <!-- Cast parting weld seam around turret cheek -->
+  <path d="M 20,40 Q 34,26 62,24 Q 86,27 102,41" fill="none" stroke="#687f52" stroke-width="0.7" stroke-dasharray="2,1.5" opacity="0.5"/>
+  <path d="M 20,80 Q 34,94 62,96 Q 86,93 102,79" fill="none" stroke="#222c19" stroke-width="0.8" opacity="0.55"/>
+
+  <!-- Turret Upper Roof Plate (inset bevel + metallic edge highlight) -->
+  <path d="M 23,39 Q 36,27 62,25 Q 84,28 100,42 L 100,78 Q 84,92 62,95 Q 36,93 23,81 Q 17,60 23,39 Z" fill="url(#turretRoofGrad)" stroke="#25301b" stroke-width="1"/>
+  <path d="M 25,40 Q 38,29 62,27 Q 82,30 97,42" fill="none" stroke="#78905f" stroke-width="0.75" opacity="0.45"/>
+
+  <!-- Gun Mantlet Housing (Front of turret, centered around y=60) -->
+  <rect x="98" y="42" width="15" height="36" rx="4" fill="url(#mantletGrad)" stroke="#161d10" stroke-width="1.2"/>
+  <line x1="103" y1="43" x2="103" y2="77" stroke="#26311c" stroke-width="1.2"/>
+  <line x1="100" y1="44" x2="100" y2="76" stroke="#738a5b" stroke-width="0.6" opacity="0.4"/>
+  <!-- Coaxial 7.62mm DT armored port on RIGHT (+Y) side of mantlet (y=71, +11 from center) -->
+  <circle cx="110" cy="71" r="3.4" fill="#232c1b" stroke="#13180e" stroke-width="0.9"/>
+  <circle cx="110" cy="71" r="1.6" fill="#0f130c"/>
+  <!-- Mantlet pivot bolts & chipped paint -->
+  <circle cx="107" cy="47" r="1.5" fill="#222b19"/>
+  <circle cx="107" cy="75.5" r="1.3" fill="#222b19"/>
+
+  <!-- Commander's Cupola (Left / Port side, -Y: y=39) -->
+  <g id="commander-cupola">
+    <circle cx="54" cy="39" r="12.5" fill="#425432" stroke="#182012" stroke-width="1.2"/>
+    <circle cx="54" cy="39" r="9.5" fill="#53683f" stroke="#222c1a" stroke-width="0.9"/>
+    <!-- Split cupola hatch hinge line & latch -->
+    <line x1="54" y1="29.5" x2="54" y2="48.5" stroke="#1e2717" stroke-width="1.2"/>
+    <rect x="46" y="38" width="2.2" height="2.2" fill="#29341e"/>
+    <!-- Cupola periscopes / vision blocks with glass optics -->
+    <rect x="44" y="37" width="3" height="4" rx="0.6" fill="#1c2317"/>
+    <rect x="44.5" y="37.6" width="1.6" height="2.8" fill="#587b88"/>
+    <rect x="61" y="37" width="3" height="4" rx="0.6" fill="#1c2317"/>
+    <rect x="61.9" y="37.6" width="1.6" height="2.8" fill="#587b88"/>
+    <rect x="52" y="29" width="4" height="3" rx="0.6" fill="#1c2317"/>
+    <rect x="52.6" y="29.5" width="2.8" height="1.5" fill="#587b88"/>
+    <!-- Center rotating periscope -->
+    <circle cx="54" cy="39" r="3" fill="#323f26" stroke="#141a0f" stroke-width="0.8"/>
+    <circle cx="54" cy="39" r="1.3" fill="#638896"/>
+  </g>
+
+  <!-- Loader's Hatch (Right / Starboard side, +Y: y=73) -->
+  <g id="loader-hatch">
+    <circle cx="58" cy="73" r="10" fill="#465835" stroke="#182012" stroke-width="1.1"/>
+    <circle cx="58" cy="73" r="7.5" fill="#556b41" stroke="#242f1c" stroke-width="0.8"/>
+    <!-- Hatch hinge & handle -->
+    <rect x="65" y="70.5" width="4" height="5" rx="0.8" fill="#323f26" stroke="#182012" stroke-width="0.7"/>
+    <line x1="53" y1="73" x2="56" y2="73" stroke="#1e2717" stroke-width="1.1"/>
+  </g>
+
+  <!-- Twin Rear Mushroom Ventilator Domes -->
+  <circle cx="31" cy="52" r="6.5" fill="url(#domeGrad)" stroke="#182012" stroke-width="1"/>
+  <circle cx="31" cy="68" r="6.5" fill="url(#domeGrad)" stroke="#182012" stroke-width="1"/>
+
+  <!-- Gunner / Loader Roof Periscope Housings (MK-4 with glass optics) -->
+  <rect x="76" y="42" width="6" height="5" rx="1" fill="#313e25" stroke="#161d10" stroke-width="0.8"/>
+  <rect x="78.5" y="43" width="2.5" height="3" fill="#5b7f8c"/>
+  <rect x="78" y="73" width="6" height="5" rx="1" fill="#313e25" stroke="#161d10" stroke-width="0.8"/>
+  <rect x="80.5" y="74" width="2.5" height="3" fill="#5b7f8c"/>
+
+  <!-- Turret Side Handrails & Lifting Eyes -->
+  <g stroke="#202918" stroke-width="1.2" fill="none">
+    <path d="M 40 23 L 58 20 L 76 23"/>
+    <path d="M 40 97 L 58 100 L 76 97"/>
+  </g>
+</svg>

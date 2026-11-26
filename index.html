@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>T-34-85 Top-Down Tank Simulator</title>
+  <link rel="stylesheet" href="./style.css?v=10" />
+</head>
+<body>
+  <canvas id="game-canvas"></canvas>
+
+  <!-- Military HUD Overlay -->
+  <div class="hud-overlay">
+    <!-- Top-Right: Compact Settings Gear Toggle & Collapsible Tabbed Settings Panel -->
+    <button id="btn-settings-toggle" class="settings-gear-btn" type="button" title="Settings" aria-label="Settings">⚙</button>
+
+    <section id="settings-drawer" class="hud-panel hud-settings-drawer hidden" aria-label="Settings">
+      <header class="settings-header">
+        <span class="panel-title">SETTINGS</span>
+        <button id="btn-settings-close" class="settings-close-btn" type="button" title="Close Settings" aria-label="Close Settings">✕</button>
+      </header>
+
+      <nav class="settings-tabs" role="tablist">
+        <button class="settings-tab active" type="button" data-tab="audio" role="tab" aria-selected="true">AUDIO</button>
+        <button class="settings-tab" type="button" data-tab="controls" role="tab" aria-selected="false">CONTROLS</button>
+        <button class="settings-tab" type="button" data-tab="adjustment" role="tab" aria-selected="false">ADJUST</button>
+        <button class="settings-tab" type="button" data-tab="gamemode" role="tab" aria-selected="false">MODE</button>
+      </nav>
+
+      <div class="settings-content">
+        <!-- AUDIO TAB -->
+        <div class="settings-tab-pane active" data-tab-pane="audio" role="tabpanel">
+          <div class="settings-group">
+            <div class="settings-group-header">
+              <span class="stat-label">MASTER AUDIO</span>
+              <button id="btn-audio" class="audio-btn" type="button">AUDIO: ON</button>
+            </div>
+            <div class="audio-channels">
+              <label class="slider-row">
+                <span class="slider-name">ENGINE</span>
+                <input id="vol-engine" type="range" min="0" max="100" value="85" />
+                <span class="slider-val" id="val-vol-engine">85%</span>
+              </label>
+              <label class="slider-row">
+                <span class="slider-name">TRACKS</span>
+                <input id="vol-tracks" type="range" min="0" max="100" value="85" />
+                <span class="slider-val" id="val-vol-tracks">85%</span>
+              </label>
+              <label class="slider-row">
+                <span class="slider-name">CANNON</span>
+                <input id="vol-cannon" type="range" min="0" max="100" value="95" />
+                <span class="slider-val" id="val-vol-cannon">95%</span>
+              </label>
+              <label class="slider-row">
+                <span class="slider-name">MG 7.62</span>
+                <input id="vol-mg" type="range" min="0" max="100" value="85" />
+                <span class="slider-val" id="val-vol-mg">85%</span>
+              </label>
+              <label class="slider-row">
+                <span class="slider-name">INFANTRY</span>
+                <input id="vol-infantry" type="range" min="0" max="100" value="85" />
+                <span class="slider-val" id="val-vol-infantry">85%</span>
+              </label>
+              <label class="slider-row">
+                <span class="slider-name">RELOAD</span>
+                <input id="vol-reload" type="range" min="0" max="100" value="90" />
+                <span class="slider-val" id="val-vol-reload">90%</span>
+              </label>
+              <label class="slider-row">
+                <span class="slider-name">CREW</span>
+                <input id="vol-crew" type="range" min="0" max="100" value="95" />
+                <span class="slider-val" id="val-vol-crew">95%</span>
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <!-- CONTROLS TAB -->
+        <div class="settings-tab-pane" data-tab-pane="controls" role="tabpanel">
+          <div class="settings-group">
+            <div class="controls-list">
+              <div class="ctrl-row"><span class="ctrl-keys"><kbd>W</kbd><kbd>S</kbd></span><span class="ctrl-desc">Drive / Reverse</span></div>
+              <div class="ctrl-row"><span class="ctrl-keys"><kbd>A</kbd><kbd>D</kbd></span><span class="ctrl-desc">Turn Hull L / R</span></div>
+              <div class="ctrl-row"><span class="ctrl-keys"><kbd>Q</kbd>/<kbd>O</kbd></span><span class="ctrl-desc">Turret Left</span></div>
+              <div class="ctrl-row"><span class="ctrl-keys"><kbd>E</kbd>/<kbd>P</kbd></span><span class="ctrl-desc">Turret Right</span></div>
+              <div class="ctrl-row"><span class="ctrl-keys"><kbd>SPACE</kbd></span><span class="ctrl-desc">Fire 85mm Gun</span></div>
+              <div class="ctrl-row"><span class="ctrl-keys"><kbd>Z</kbd></span><span class="ctrl-desc">Coaxial 7.62mm DT</span></div>
+              <div class="ctrl-row"><span class="ctrl-keys"><kbd>X</kbd></span><span class="ctrl-desc">Hull 7.62mm DT</span></div>
+              <div class="ctrl-row"><span class="ctrl-keys"><kbd>I</kbd></span><span class="ctrl-desc">Start / Stop Engine</span></div>
+              <div class="ctrl-row"><span class="ctrl-keys"><kbd>Y</kbd></span><span class="ctrl-desc">X-Ray Inspection</span></div>
+              <div class="ctrl-row"><span class="ctrl-keys"><kbd>G</kbd></span><span class="ctrl-desc">Crew Select / Hold Exit</span></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ADJUSTMENT TAB -->
+        <div class="settings-tab-pane" data-tab-pane="adjustment" role="tabpanel">
+          <div class="settings-group">
+            <div class="settings-group-header">
+              <span class="stat-label">V-2-34 DIESEL &amp; SYSTEMS</span>
+            </div>
+            <div class="adj-row">
+              <span class="adj-label">ENGINE STATE</span>
+              <button id="btn-engine" class="engine-btn" type="button">ENGINE OFF</button>
+            </div>
+            <div class="adj-row">
+              <span class="adj-label">CREW VOICE</span>
+              <button id="btn-crew" class="engine-btn state-idle" type="button">CREW: ON</button>
+            </div>
+            <div class="adj-row">
+              <span class="adj-label">TIME OF DAY</span>
+              <button id="btn-day-night" class="engine-btn state-idle" type="button">MODE: DAY</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- GAME MODE TAB -->
+        <div class="settings-tab-pane" data-tab-pane="gamemode" role="tabpanel">
+          <div class="settings-group">
+            <div class="settings-group-header">
+              <span class="stat-label">SELECT BATTLEFIELD MODE</span>
+            </div>
+            <div class="mode-cards">
+              <button class="mode-card selected" type="button" data-mode="simulation">
+                <svg class="mode-preview" viewBox="0 0 48 36" width="48" height="36">
+                  <rect width="48" height="36" fill="#18181a" rx="3"/>
+                  <rect x="0" y="0" width="24" height="18" fill="#f0f0ec" opacity="0.88"/>
+                  <rect x="24" y="18" width="24" height="18" fill="#f0f0ec" opacity="0.88"/>
+                  <line x1="24" y1="0" x2="24" y2="36" stroke="#6e6e6a" stroke-width="1"/>
+                  <line x1="0" y1="18" x2="48" y2="18" stroke="#6e6e6a" stroke-width="1"/>
+                  <rect x="29" y="6" width="10" height="6" fill="#5e6569" stroke="#222" stroke-width="0.7"/>
+                </svg>
+                <div class="mode-info">
+                  <div class="mode-title">SIMULATION MODE</div>
+                  <div class="mode-desc">Grid battlefield, flat terrain, Panzer III &amp; 8 infantry.</div>
+                </div>
+              </button>
+
+              <button class="mode-card" type="button" data-mode="firing_range">
+                <svg class="mode-preview" viewBox="0 0 48 36" width="48" height="36">
+                  <rect width="48" height="36" fill="#485c36" rx="3"/>
+                  <ellipse cx="15" cy="24" rx="11" ry="7" fill="#684e32" opacity="0.85"/>
+                  <ellipse cx="35" cy="12" rx="10" ry="7" fill="#baa070" opacity="0.85"/>
+                  <circle cx="11" cy="10" r="5" fill="#364e2a"/>
+                  <circle cx="38" cy="27" r="4.5" fill="#405a32"/>
+                </svg>
+                <div class="mode-info">
+                  <div class="mode-title">FIRING RANGE MODE</div>
+                  <div class="mode-desc">WWII trench battlefield or natural terrain + enemy combat.</div>
+                </div>
+              </button>
+
+              <button class="mode-card" type="button" data-mode="soviet_trench_defense">
+                <svg class="mode-preview" viewBox="0 0 48 36" width="48" height="36">
+                  <rect width="48" height="36" fill="#3f502f" rx="3"/>
+                  <rect x="12" y="8" width="24" height="20" fill="none" stroke="#6b5134" stroke-width="3.5" rx="2"/>
+                  <rect x="20" y="15" width="8" height="6" fill="#4f6342" stroke="#222" stroke-width="0.7"/>
+                  <circle cx="13" cy="9" r="2.2" fill="#d44438"/>
+                  <circle cx="35" cy="27" r="2.2" fill="#d44438"/>
+                </svg>
+                <div class="mode-info">
+                  <div class="mode-title">SOVIET TRENCH DEFENSE</div>
+                  <div class="mode-desc">Defend the Soviet fortified position against a coordinated German armored and infantry assault.</div>
+                </div>
+              </button>
+
+              <button class="mode-card" type="button" data-mode="custom_battle">
+                <svg class="mode-preview" viewBox="0 0 48 36" width="48" height="36">
+                  <rect width="48" height="36" fill="#2c3527" rx="3"/>
+                  <rect x="5" y="12" width="11" height="7" fill="#5e744a" stroke="#181c14" stroke-width="0.8"/>
+                  <rect x="32" y="12" width="11" height="7" fill="#6b7278" stroke="#181c14" stroke-width="0.8"/>
+                  <line x1="24" y1="5" x2="24" y2="31" stroke="#c89e48" stroke-width="1" stroke-dasharray="2 2"/>
+                </svg>
+                <div class="mode-info">
+                  <div class="mode-title">CUSTOM BATTLE</div>
+                  <div class="mode-desc">Build your own Soviet and German forces, configure their equipment and test different battlefield combinations.</div>
+                </div>
+              </button>
+            </div>
+            <div class="adj-row" style="margin-top: 8px; margin-bottom: 8px;">
+              <span class="adj-label">FIRING RANGE MAP</span>
+              <button id="btn-firing-preset" class="engine-btn state-idle" type="button">MAP: TRENCHES</button>
+            </div>
+            <div class="adj-row" style="margin-bottom: 8px;">
+              <span class="adj-label">FRIENDLY FIRE</span>
+              <button id="btn-friendly-fire" class="engine-btn state-running" type="button">FRIENDLY FIRE: ON</button>
+            </div>
+            <button id="btn-apply-mode" class="mode-apply-btn" type="button">APPLY MODE</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Top-Right (beside Settings): Custom Battle Live Status Panel -->
+    <section id="hud-custom-panel" class="hud-panel hidden" style="position: fixed; top: 14px; right: 58px; z-index: 25; padding: 8px 14px; min-width: 375px; pointer-events: auto;" aria-label="Custom Battle Status">
+      <div style="display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 5px;">
+        <span class="panel-title" style="margin: 0; letter-spacing: 0.08em;">CUSTOM BATTLE</span>
+        <div style="display: flex; align-items: center; gap: 6px;">
+          <span id="cb-outcome" class="badge badge-ok" style="display: none;">SOVIET VICTORY</span>
+          <button id="btn-cb-spectator" class="engine-btn state-idle" type="button" style="padding: 2px 7px; font-size: 9.5px;">SPECTATOR [V]</button>
+          <button id="btn-cb-reconfigure" class="engine-btn state-idle" type="button" style="padding: 2px 8px; font-size: 10px;">RECONFIGURE</button>
+        </div>
+      </div>
+      <div style="margin-bottom: 5px; font-size: 10px; color: #c7d4b8; border-bottom: 1px solid rgba(169,204,137,0.18); padding-bottom: 4px;">
+        CONTROL: <strong id="cb-possession-label" style="color: #89b864;">SPECTATOR (CLICK UNIT TO POSSESS)</strong>
+      </div>
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 4px 16px; font-size: 10.5px; letter-spacing: 0.04em;">
+        <div style="color: #a9cc89;">SOVIET TANKS: <strong id="cb-sov-tanks">0 / 0</strong></div>
+        <div style="color: #e29684;">GERMAN TANKS: <strong id="cb-ger-tanks">0 / 0</strong></div>
+        <div style="color: #a9cc89;">SOVIET INFANTRY: <strong id="cb-sov-inf">0 / 0</strong></div>
+        <div style="color: #e29684;">GERMAN INFANTRY: <strong id="cb-ger-inf">0 / 0</strong></div>
+        <div style="color: #a9cc89;">ARTILLERY: <strong id="cb-sov-art">0 / 0</strong> <span style="opacity:0.85;">(CREW <strong id="cb-sov-art-crew">0/0</strong>)</span></div>
+        <div style="color: #a9cc89;">HEAVY MGS: <strong id="cb-sov-hmg">0 / 0</strong></div>
+      </div>
+    </section>
+
+    <!-- Custom Battle Configuration Modal -->
+    <section id="custom-battle-modal" class="hud-panel hidden" style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 60; width: min(820px, 94vw); max-height: 88vh; overflow-y: auto; padding: 14px 16px; background: rgba(16, 19, 14, 0.96); border: 1px solid rgba(169, 204, 137, 0.38); pointer-events: auto;" aria-label="Custom Battle Configuration">
+      <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; border-bottom: 1px solid rgba(169,204,137,0.2); padding-bottom: 8px;">
+        <div>
+          <div class="panel-title" style="margin: 0; font-size: 13px; letter-spacing: 0.09em;">CUSTOM BATTLE CONFIGURATION</div>
+          <div style="font-size: 10.5px; color: #9eb08d; margin-top: 2px;">Build your own Soviet and German forces, configure their equipment and test different battlefield combinations.</div>
+        </div>
+        <button id="btn-cb-close" class="settings-close-btn" type="button" aria-label="Close Custom Battle Configuration">&times;</button>
+      </div>
+
+      <!-- Presets -->
+      <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin-bottom: 12px;">
+        <span style="font-size: 10px; color: #9eb08d; letter-spacing: 0.06em; margin-right: 4px;">PRESETS:</span>
+        <button class="engine-btn state-idle cb-preset-btn" type="button" data-preset="balanced" style="padding: 3px 8px; font-size: 10px;">Balanced Battle</button>
+        <button class="engine-btn state-idle cb-preset-btn" type="button" data-preset="soviet_defense" style="padding: 3px 8px; font-size: 10px;">Soviet Defensive Test</button>
+        <button class="engine-btn state-idle cb-preset-btn" type="button" data-preset="german_armor" style="padding: 3px 8px; font-size: 10px;">German Armored Assault</button>
+        <button class="engine-btn state-idle cb-preset-btn" type="button" data-preset="infantry_test" style="padding: 3px 8px; font-size: 10px;">Infantry Combat Test</button>
+        <button class="engine-btn state-idle cb-preset-btn" type="button" data-preset="artillery_test" style="padding: 3px 8px; font-size: 10px;">Artillery Test</button>
+      </div>
+
+      <!-- Two Faction Panels -->
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px;">
+        <div style="border: 1px solid rgba(169,204,137,0.28); border-radius: 4px; padding: 10px; background: rgba(45, 58, 34, 0.25);">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+            <span style="color: #a9cc89; font-weight: 700; font-size: 11.5px; letter-spacing: 0.06em;">SOVIET UNION</span>
+            <span style="font-size: 10.5px; color: #c7d4b8;">TOTAL: <strong id="cb-total-soviet">0</strong></span>
+          </div>
+          <div id="cb-soviet-units" style="display: flex; flex-direction: column; gap: 6px;"></div>
+        </div>
+
+        <div style="border: 1px solid rgba(226,150,132,0.28); border-radius: 4px; padding: 10px; background: rgba(74, 42, 34, 0.22);">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+            <span style="color: #e29684; font-weight: 700; font-size: 11.5px; letter-spacing: 0.06em;">GERMANY</span>
+            <span style="font-size: 10.5px; color: #e6c6bd;">TOTAL: <strong id="cb-total-germany">0</strong></span>
+          </div>
+          <div id="cb-germany-units" style="display: flex; flex-direction: column; gap: 6px;"></div>
+        </div>
+      </div>
+
+      <!-- Battlefield Settings -->
+      <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 10px; padding: 8px 10px; border: 1px solid rgba(255,255,255,0.1); border-radius: 4px; background: rgba(0,0,0,0.25); font-size: 10.5px;">
+        <label style="display: flex; flex-direction: column; gap: 4px; color: #c7d4b8;">
+          <span>BATTLEFIELD MAP</span>
+          <select id="cb-map-select" style="background: #1b2017; color: #e2ebd4; border: 1px solid rgba(169,204,137,0.3); padding: 4px; border-radius: 3px; font-size: 11px;">
+            <option value="trench">WWII Trenches</option>
+            <option value="natural">Natural Terrain</option>
+            <option value="simulation">Proving Ground Grid</option>
+          </select>
+        </label>
+        <label style="display: flex; flex-direction: column; gap: 4px; color: #c7d4b8;">
+          <span>DEPLOYMENT</span>
+          <select id="cb-deploy-select" style="background: #1b2017; color: #e2ebd4; border: 1px solid rgba(169,204,137,0.3); padding: 4px; border-radius: 3px; font-size: 11px;">
+            <option value="opposing">Opposing Lines</option>
+            <option value="flanking">Flanking Approach</option>
+            <option value="random">Randomized Positions</option>
+          </select>
+        </label>
+        <label style="display: flex; flex-direction: column; gap: 4px; color: #c7d4b8;">
+          <span>INITIAL DISTANCE</span>
+          <select id="cb-dist-select" style="background: #1b2017; color: #e2ebd4; border: 1px solid rgba(169,204,137,0.3); padding: 4px; border-radius: 3px; font-size: 11px;">
+            <option value="close">Close (~540px)</option>
+            <option value="medium" selected>Medium (~920px)</option>
+            <option value="long">Long (~1360px)</option>
+          </select>
+        </label>
+      </div>
+
+      <!-- Validation / Performance Notice & Start Battle -->
+      <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px;">
+        <div id="cb-validation-msg" style="font-size: 10.5px; color: #f0b443; min-height: 16px;"></div>
+        <button id="btn-cb-start" class="mode-apply-btn" type="button" style="width: auto; padding: 8px 22px; margin: 0;">START BATTLE</button>
+      </div>
+    </section>
+
+    <!-- Top-Right (beside Settings): Soviet Trench Defense Battle Status Panel -->
+    <section id="hud-defense-panel" class="hud-panel hidden" style="position: fixed; top: 14px; right: 58px; z-index: 25; padding: 8px 14px; min-width: 340px; pointer-events: none;" aria-label="Soviet Trench Defense Status">
+      <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 6px;">
+        <span class="panel-title" style="margin: 0; letter-spacing: 0.08em;">SOVIET TRENCH DEFENSE</span>
+        <span id="def-outcome" class="badge badge-ok" style="display: none;">DEFENSE HELD</span>
+      </div>
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px 16px; font-size: 11px; letter-spacing: 0.04em;">
+        <div style="color: #a9cc89;">SOVIET TANKS: <strong id="def-sov-tanks">3 / 3</strong></div>
+        <div style="color: #e29684;">GERMAN TANKS: <strong id="def-ger-tanks">5 / 5</strong></div>
+        <div style="color: #a9cc89;">SOVIET INFANTRY: <strong id="def-sov-inf">20 / 20</strong> <span style="opacity:0.85;">(HMG <strong id="def-sov-hmg">2</strong>/2)</span></div>
+        <div style="color: #e29684;">GERMAN INFANTRY: <strong id="def-ger-inf">30 / 30</strong></div>
+      </div>
+      <div id="def-zis3-box" style="margin-top: 7px; padding-top: 6px; border-top: 1px solid rgba(169, 204, 137, 0.22); font-size: 10px; letter-spacing: 0.04em;">
+        <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 3px;">
+          <span style="color: #d6e4c4; font-weight: 700;">ZIS-3 76.2MM M1942</span>
+          <span id="def-zis3-status" class="badge badge-ok">OPERATIONAL</span>
+          <span id="def-zis3-reload-txt" style="color: #a9cc89;">READY</span>
+        </div>
+        <div style="height: 4px; background: rgba(255,255,255,0.1); border-radius: 2px; overflow: hidden; margin-bottom: 4px;">
+          <div id="def-zis3-reload-bar" style="height: 100%; width: 100%; background: #89b864;"></div>
+        </div>
+        <div style="display: flex; justify-content: space-between; gap: 8px; color: #c7d4b8;">
+          <span>SEL: <strong id="def-zis3-sel">BR350A</strong></span>
+          <span>CREW: <strong id="def-zis3-crew">3/3</strong> (<span id="def-zis3-roles">C:OK L:OK G:OK</span>)</span>
+        </div>
+        <div id="def-zis3-ammo" style="margin-top: 3px; color: #9eb08d; font-size: 9.5px;">350A:14 350B:10 SP:8 354P:6 OF:16 Sh:10</div>
+      </div>
+    </section>
+
+    <!-- Top-Left Region (Flexbox Flow: Tactical Minimap + Crew/Infantry Stack) -->
+    <div class="hud-top-left-region">
+      <section class="hud-panel hud-minimap-panel" id="minimap-panel" aria-label="Tactical Minimap">
+        <div class="minimap-header">
+          <span class="panel-title">MAP [M]</span>
+          <div class="minimap-actions">
+            <button id="btn-minimap-zoom-out" class="minimap-btn" type="button" title="Zoom Out">-</button>
+            <span class="minimap-zoom-label" id="minimap-zoom-label">1.0x</span>
+            <button id="btn-minimap-zoom-in" class="minimap-btn" type="button" title="Zoom In">+</button>
+            <button id="btn-minimap-toggle" class="minimap-btn" type="button" title="Toggle Minimap [M]">_</button>
+          </div>
+        </div>
+        <canvas id="minimap-canvas" width="220" height="220"></canvas>
+      </section>
+
+      <div class="hud-top-left-stack">
+        <section class="hud-panel hud-crew-panel" id="hud-crew-panel">
+          <div class="panel-header">
+            <span class="panel-title">CREW [G]</span>
+            <div class="crew-hold-wrap hidden" id="hud-crew-hold-wrap">
+              <svg viewBox="0 0 24 24" width="20" height="20">
+                <circle cx="12" cy="12" r="9" fill="none" stroke="rgba(124,152,102,0.25)" stroke-width="2.5"/>
+                <circle id="hud-crew-hold-ring" cx="12" cy="12" r="9" fill="none" stroke="#f0b443" stroke-width="2.5" stroke-dasharray="56.55" stroke-dashoffset="56.55" transform="rotate(-90 12 12)"/>
+              </svg>
+              <span id="hud-crew-hold-time">1.5s</span>
+            </div>
+          </div>
+          <div class="crew-roster-list" id="hud-crew-list">
+            <div class="crew-row" data-crew="DRIVER"><span class="crew-role">DRIVER</span><span class="crew-meta" id="crew-meta-DRIVER">HEALTHY • IN</span></div>
+            <div class="crew-row" data-crew="RADIO_OP"><span class="crew-role">RADIO OP</span><span class="crew-meta" id="crew-meta-RADIO_OP">HEALTHY • IN</span></div>
+            <div class="crew-row" data-crew="COMMANDER"><span class="crew-role">CMDR</span><span class="crew-meta" id="crew-meta-COMMANDER">HEALTHY • IN</span></div>
+            <div class="crew-row" data-crew="GUNNER"><span class="crew-role">GUNNER</span><span class="crew-meta" id="crew-meta-GUNNER">HEALTHY • IN</span></div>
+            <div class="crew-row" data-crew="LOADER"><span class="crew-role">LOADER</span><span class="crew-meta" id="crew-meta-LOADER">HEALTHY • IN</span></div>
+          </div>
+        </section>
+
+        <!-- Controlled Infantry Status (visible only in INFANTRY_CONTROL mode) -->
+        <section class="hud-panel hud-infantry-control hidden" id="hud-infantry-control">
+          <div class="panel-header">
+            <span class="panel-title" id="hud-inf-ctrl-title">INFANTRY CONTROL</span>
+            <span class="badge badge-ok" id="hud-inf-ctrl-state">ALIVE</span>
+          </div>
+          <div class="repair-row">
+            <span id="hud-inf-ctrl-role">ROLE: RIFLEMAN</span>
+            <span id="hud-inf-ctrl-hp">HP: 20</span>
+          </div>
+          <div class="repair-row" style="align-items:center; justify-content:space-between; margin-top:4px; padding-top:4px; border-top:1px solid rgba(255,255,255,0.12);">
+            <span id="hud-inf-ctrl-weapon" style="font-weight:700; color:#f1c40f;">MOSIN M1891/30</span>
+            <span id="hud-inf-ctrl-ammo" style="font-family:var(--font-mono); font-weight:700;">5 / 30</span>
+          </div>
+          <div class="repair-row" style="align-items:center; justify-content:space-between; margin-top:2px;">
+            <span style="font-size:10px; opacity:0.78;">STATUS</span>
+            <span class="badge badge-ok" id="hud-inf-weapon-status" style="font-size:10px;">READY</span>
+          </div>
+          <div id="hud-inf-slots" style="display:flex; flex-direction:column; gap:3px; margin-top:6px; padding-top:6px; border-top:1px solid rgba(255,255,255,0.12); font-size:11px; font-family:var(--font-mono);"></div>
+          <div class="repair-row hidden" id="hud-inf-bayonet-row" style="align-items:center; justify-content:space-between; margin-top:5px; padding-top:5px; border-top:1px dashed rgba(255,255,255,0.14); font-size:11px; font-family:var(--font-mono);">
+            <span id="hud-inf-bayonet-label">[Q] BAYONET</span>
+            <span class="badge badge-ok" id="hud-inf-bayonet-state" style="font-size:10px;">ATTACHED</span>
+          </div>
+        </section>
+
+        <!-- Controlled Emplacement Status (visible only when controlling Artillery / Heavy MG) -->
+        <section class="hud-panel hud-emplacement-panel hidden" id="hud-emplacement-panel" style="position: fixed; bottom: 14px; left: 14px; z-index: 25; min-width: 265px;">
+          <div class="panel-header">
+            <span class="panel-title" id="hud-emp-title">76MM ZIS-3 FIELD GUN</span>
+            <span class="badge badge-ok" id="hud-emp-state">READY</span>
+          </div>
+          <div class="repair-row">
+            <span id="hud-emp-weapon">76.2MM ZIS-3</span>
+            <span id="hud-emp-ammo" style="font-family:var(--font-mono); font-weight:700;">HE + AP</span>
+          </div>
+          <div class="repair-row">
+            <span id="hud-emp-crew">CREW: 3 / 3</span>
+            <span id="hud-emp-hp">HP: 240</span>
+          </div>
+          <div class="repair-row" style="font-size:10px; opacity:0.8; margin-top:4px;">
+            <span id="hud-emp-controls">A/D AIM • 1-6 SHELLS • SPACE FIRE • V/ESC SPECTATOR</span>
+          </div>
+        </section>
+      </div>
+    </div>
+
+    <!-- Top-Center: X-Ray Inspection Status (visible when Y is active) -->
+    <section class="hud-panel hud-top-center hidden" id="hud-xray-panel">
+      <div class="xray-header">
+        <span class="xray-dot"></span>
+        <span>INTERNAL MODULE INSPECTION [Y]</span>
+      </div>
+      <div class="xray-status" id="hud-xray-status">CREW: 5/5 &bull; ALL MODULES: NORMAL</div>
+    </section>
+
+    <!-- Top-Center: Compact Damage Warning Pills & Status Notice -->
+    <div class="hud-warnings" id="hud-damage-warnings"></div>
+    <div class="hud-notice hidden" id="hud-notice" style="top: 132px; z-index: 35;"></div>
+
+    <!-- Top-Center: Field Track Repair Progress (only visible when track broken / repairing) -->
+    <section class="hud-panel hud-repair-panel hidden" id="hud-repair-panel">
+      <div class="repair-row">
+        <span>TRACK L: <strong id="hud-track-l">OPERATIONAL</strong></span>
+        <span>TRACK R: <strong id="hud-track-r">OPERATIONAL</strong></span>
+      </div>
+      <div class="repair-row">
+        <span id="hud-repair-crew-status">CREW REPAIR: STANDBY</span>
+        <span id="hud-repair-time">--</span>
+      </div>
+      <div class="bar-track hidden" id="hud-repair-bar-wrap">
+        <div class="bar-fill cannon-fill" id="hud-repair-bar" style="width: 0%"></div>
+      </div>
+    </section>
+
+    <!-- Bottom-Left Cluster: 85mm Main Cannon + T-34-85 Telemetry -->
+    <div class="hud-bottom-left-cluster">
+      <section class="hud-panel hud-bottom-left">
+        <div class="panel-header">
+          <span class="panel-title">85MM ZIS-S-53</span>
+          <span class="badge badge-ok" id="hud-cannon-status">READY</span>
+        </div>
+        <div class="weapon-main-row">
+          <span class="stat-label">SHELLS</span>
+          <span class="ammo-big" id="hud-cannon-ammo">56 / 56</span>
+        </div>
+        <div class="bar-track">
+          <div class="bar-fill cannon-fill" id="hud-cannon-bar" style="width: 100%"></div>
+        </div>
+        <div class="ammo-type-row" id="hud-ammo-types">
+          <button type="button" class="ammo-pill active" data-ammo="BR365K">1:APHE (24)</button>
+          <button type="button" class="ammo-pill" data-ammo="BR365A">2:BR-365A (12)</button>
+          <button type="button" class="ammo-pill" data-ammo="BR365P">3:APCR (6)</button>
+          <button type="button" class="ammo-pill ammo-he" data-ammo="O365K">4:HE O-365K (14)</button>
+        </div>
+      </section>
+
+      <section class="hud-panel hud-telemetry-panel">
+        <div class="panel-header">
+          <span class="vehicle-tag">T-34-85</span>
+          <span class="sub-tag">MEDIUM TANK // 1944</span>
+        </div>
+
+        <div class="telemetry-row">
+          <div class="compass-box" title="Hull & Turret Orientation">
+            <svg viewBox="0 0 72 72" width="72" height="72">
+              <circle cx="36" cy="36" r="32" fill="#0d110d" stroke="#3f4d36" stroke-width="1.5"/>
+              <text x="36" y="11" text-anchor="middle" fill="#8ca37c" font-size="7" font-weight="700">N</text>
+              <text x="64" y="38.5" text-anchor="middle" fill="#596652" font-size="6.5">E</text>
+              <text x="36" y="66" text-anchor="middle" fill="#596652" font-size="6.5">S</text>
+              <text x="8" y="38.5" text-anchor="middle" fill="#596652" font-size="6.5">W</text>
+              <!-- Hull direction indicator -->
+              <g id="compass-hull" transform="rotate(0 36 36)">
+                <rect x="29" y="21" width="14" height="28" rx="2" fill="none" stroke="#85a66d" stroke-width="1.6"/>
+                <polygon points="36,16 32,22 40,22" fill="#85a66d"/>
+              </g>
+              <!-- Turret aim indicator -->
+              <g id="compass-turret" transform="rotate(0 36 36)">
+                <line x1="36" y1="36" x2="36" y2="11" stroke="#f0b443" stroke-width="2" stroke-linecap="round"/>
+                <circle cx="36" cy="36" r="4" fill="#f0b443"/>
+              </g>
+            </svg>
+          </div>
+
+          <div class="telemetry-grid">
+            <div class="stat-item">
+              <span class="stat-label">SPEED</span>
+              <span class="stat-value" id="hud-speed">0.0 km/h</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-label">GEAR</span>
+              <span class="stat-value turret-color" id="hud-gear">N</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-label">RPM / THR</span>
+              <span class="stat-value" id="hud-rpm">0 • 0%</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-label">SECTOR</span>
+              <span class="stat-value" id="hud-sector">B2</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-label">HULL HDG</span>
+              <span class="stat-value hull-color" id="hud-hull-deg">000°</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-label">TURRET</span>
+              <span class="stat-value turret-color" id="hud-turret-deg">000°</span>
+            </div>
+            <div class="stat-item full-span">
+              <span class="stat-label">TRAVERSE MODE</span>
+              <span class="stat-value mono-dim" id="hud-traverse-mode">MANUAL TRAVERSE</span>
+            </div>
+            <div class="stat-item full-span">
+              <span class="stat-label">POS</span>
+              <span class="stat-value mono-dim" id="hud-coords">1800, 1800</span>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- Dev-only Ballistics Debug Panel (toggle with F9, hidden by default) -->
+    <section class="hud-panel combat-debug hidden" id="combat-debug-panel"></section>
+
+    <!-- Bottom-Right: Dual 7.62mm DT Machine Guns -->
+    <section class="hud-panel hud-bottom-right">
+      <div class="panel-header">
+        <span class="panel-title">7.62MM DT SYSTEM</span>
+        <span class="ammo-pool">POOL: <strong id="hud-mg-total">1,890</strong></span>
+      </div>
+
+      <!-- Coaxial MG -->
+      <div class="mg-block">
+        <div class="mg-top">
+          <span class="mg-name">COAXIAL (Z)</span>
+          <span class="mg-mag" id="hud-coax-mag">63 / 63</span>
+          <span class="badge badge-ok" id="hud-coax-status">READY</span>
+        </div>
+        <div class="heat-row">
+          <span class="heat-label">HEAT</span>
+          <div class="bar-track">
+            <div class="bar-fill heat-fill" id="hud-coax-heat" style="width: 0%"></div>
+          </div>
+          <span class="heat-pct" id="hud-coax-heat-pct">0%</span>
+        </div>
+      </div>
+
+      <!-- Front Hull MG -->
+      <div class="mg-block">
+        <div class="mg-top">
+          <span class="mg-name">HULL BOW (X)</span>
+          <span class="mg-mag" id="hud-hullmg-mag">63 / 63</span>
+          <span class="badge badge-ok" id="hud-hullmg-status">READY</span>
+        </div>
+        <div class="heat-row">
+          <span class="heat-label">HEAT</span>
+          <div class="bar-track">
+            <div class="bar-fill heat-fill" id="hud-hullmg-heat" style="width: 0%"></div>
+          </div>
+          <span class="heat-pct" id="hud-hullmg-heat-pct">0%</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Bottom-Center: Soviet Infantry Tactical Command Toggle & Compact Squad Panel -->
+    <div class="hud-infantry-cmd-wrap" id="hud-infantry-cmd-wrap">
+      <div class="inf-cmd-confirm hidden" id="inf-cmd-confirm">ATTACK ORDER ISSUED</div>
+      <section class="hud-panel hud-infantry-cmd-panel hidden" id="hud-infantry-cmd-panel" aria-label="Soviet Infantry Command">
+        <div class="panel-header">
+          <span class="panel-title">SOVIET INFANTRY</span>
+          <span class="badge badge-ok" id="inf-cmd-status">READY</span>
+        </div>
+        <div class="inf-cmd-grid">
+          <span>Selected: <strong id="inf-cmd-selected">0</strong></span>
+          <span>Assault: <strong id="inf-cmd-assault">0</strong></span>
+          <span>Fire Support: <strong id="inf-cmd-support">0</strong></span>
+          <span id="inf-cmd-obj">Obj: NONE</span>
+        </div>
+        <div class="inf-cmd-actions">
+          <span class="inf-cmd-hint">LMB: Select / Drag &bull; Shift+LMB: Add/Remove &bull; RMB: Attack</span>
+          <button type="button" class="inf-cmd-clear-btn" id="btn-inf-cmd-clear">DESELECT</button>
+        </div>
+      </section>
+      <button type="button" class="inf-cmd-toggle-btn" id="btn-infantry-cmd" title="Toggle Infantry Command Mode [C]">CMD INFANTRY [C]</button>
+    </div>
+
+    <!-- Friendly Fire Contextual Warning Toast -->
+    <div class="ff-toast hidden" id="friendly-fire-toast" role="status" aria-live="polite">
+      <div class="ff-toast-title" id="ff-toast-title">FRIENDLY FIRE</div>
+      <div class="ff-toast-detail" id="ff-toast-detail">Allied unit hit</div>
+    </div>
+
+    <!-- Reinforcement Radio Notification Banner -->
+    <div class="reinf-banner hidden" id="reinforcement-banner">
+      <div class="reinf-banner-title" id="reinforcement-banner-title">REINFORCEMENT REQUEST ACCEPTED</div>
+      <div class="reinf-banner-sub" id="reinforcement-banner-sub">Unit advancing from perimeter</div>
+    </div>
+
+    <!-- Reinforcement Selection Modal (T key in Firing Range Mode) -->
+    <div class="reinf-menu hidden" id="reinforcement-menu" role="dialog" aria-label="Reinforcement Request">
+      <div class="reinf-header">
+        <span class="reinf-title">RADIO SUPPORT [T]</span>
+        <span class="reinf-cooldown" id="reinf-cooldown-label">READY</span>
+      </div>
+      <div class="reinf-options">
+        <button type="button" class="reinf-option" id="reinf-opt-infantry" data-reinf-type="infantry_squad">
+          <div class="reinf-opt-top">
+            <span class="reinf-opt-name">OPTION 1: SOVIET INFANTRY SQUAD</span>
+            <span class="reinf-opt-badge" id="reinf-badge-infantry">AVAILABLE</span>
+          </div>
+          <div class="reinf-opt-desc">10 Soldiers (2x PPSh-41, 8x Mosin-Nagant M1891/30) &bull; Perimeter Advance</div>
+        </button>
+        <button type="button" class="reinf-option" id="reinf-opt-tank" data-reinf-type="tank">
+          <div class="reinf-opt-top">
+            <span class="reinf-opt-name">OPTION 2: T-34-85 REINFORCEMENT</span>
+            <span class="reinf-opt-badge" id="reinf-badge-tank">AVAILABLE</span>
+          </div>
+          <div class="reinf-opt-desc">1 Friendly T-34-85 Tank (85mm ZiS-S-53 + Coax DT) &bull; Wingman Support</div>
+        </button>
+      </div>
+      <div class="reinf-footer">LEFT-CLICK: CONFIRM REQUEST &bull; RIGHT-CLICK / ESC: CLOSE</div>
+    </div>
+  </div>
+
+  <script type="module" src="./src/main.js?v=25"></script>
+</body>
+</html>

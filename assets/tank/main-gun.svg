@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 185 30" width="185" height="30">
+  <defs>
+    <linearGradient id="barrelGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#2c3921"/>
+      <stop offset="28%" stop-color="#60764a"/>
+      <stop offset="52%" stop-color="#4d603a"/>
+      <stop offset="82%" stop-color="#334125"/>
+      <stop offset="100%" stop-color="#222c18"/>
+    </linearGradient>
+    <linearGradient id="collarGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#2a351f"/>
+      <stop offset="40%" stop-color="#556941"/>
+      <stop offset="100%" stop-color="#232c19"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Subtle barrel shadow -->
+  <polygon points="62,12.2 175.5,13.2 175.5,18.8 62,19.8" fill="#000000" opacity="0.22" transform="translate(0, 2)"/>
+
+  <!-- 85mm ZiS-S-53 tapered steel barrel (pivot at 20,15; muzzle at 176,15) -->
+  <polygon points="62,10.8 175.5,12.2 175.5,17.8 62,19.2" fill="url(#barrelGrad)" stroke="#161d10" stroke-width="0.9" stroke-linejoin="round"/>
+
+  <!-- Recuperator / mantlet collar sleeve -->
+  <rect x="61" y="9.8" width="14" height="10.4" rx="1.2" fill="url(#collarGrad)" stroke="#161d10" stroke-width="0.85"/>
+  <line x1="65" y1="10.2" x2="65" y2="19.8" stroke="#222c18" stroke-width="0.8"/>
+
+  <!-- Subtle metallic specular highlight along top of barrel -->
+  <line x1="76" y1="13.2" x2="174" y2="13.8" stroke="#859c6b" stroke-width="0.65" opacity="0.55"/>
+
+  <!-- Defined muzzle crown & bore opening -->
+  <rect x="173.4" y="12.0" width="2.2" height="6.0" rx="0.5" fill="#475936" stroke="#182012" stroke-width="0.7"/>
+  <rect x="175.0" y="13.4" width="1.6" height="3.2" fill="#0a0c09"/>
+</svg>

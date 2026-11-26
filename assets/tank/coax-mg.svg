@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 20" width="100" height="20">
+  <defs>
+    <linearGradient id="mgSteel" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#222620"/>
+      <stop offset="45%" stop-color="#4e5549"/>
+      <stop offset="100%" stop-color="#191c18"/>
+    </linearGradient>
+  </defs>
+  <!-- Compact Coaxial 7.62mm DT barrel (pivot at 20,10; muzzle at 80,10 -> +60 from pivot) -->
+  <rect x="68" y="8.4" width="4.5" height="3.2" rx="0.7" fill="#323d28" stroke="#141a0f" stroke-width="0.75"/>
+  <rect x="72" y="9.0" width="7.5" height="2.0" rx="0.4" fill="url(#mgSteel)" stroke="#0e100d" stroke-width="0.65"/>
+  <rect x="78.8" y="8.8" width="1.4" height="2.4" rx="0.3" fill="#2c3029" stroke="#0e100d" stroke-width="0.45"/>
+</svg>

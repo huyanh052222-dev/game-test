@@ -1,0 +1,1398 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: #0d0d0e;
+  font-family: "JetBrains Mono", "SF Mono", "Fira Code", Menlo, Consolas, monospace;
+  color: #dfe6d8;
+  user-select: none;
+}
+
+#game-canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.hud-overlay {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  padding: 16px;
+}
+
+.hud-panel {
+  position: absolute;
+  background: rgba(14, 18, 14, 0.86);
+  border: 1px solid rgba(124, 152, 102, 0.42);
+  border-radius: 6px;
+  padding: 12px 14px;
+  backdrop-filter: blur(6px);
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.45);
+}
+
+.hud-bottom-left-cluster {
+  position: absolute;
+  bottom: 16px;
+  left: 16px;
+  display: flex;
+  align-items: flex-end;
+  gap: 10px;
+  flex-wrap: wrap;
+  max-width: calc(100vw - 360px);
+}
+
+.hud-telemetry-panel {
+  position: relative;
+  min-width: 285px;
+}
+
+.hud-bottom-left {
+  position: relative;
+  min-width: 250px;
+}
+
+.settings-gear-btn {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  pointer-events: auto;
+  width: 38px;
+  height: 38px;
+  border-radius: 6px;
+  background: rgba(14, 18, 14, 0.86);
+  border: 1px solid rgba(124, 152, 102, 0.48);
+  color: #a9cc89;
+  font-size: 20px;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  backdrop-filter: blur(6px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.45);
+  transition: background 0.15s, border-color 0.15s, color 0.15s;
+}
+
+.settings-gear-btn:hover,
+.settings-gear-btn.active {
+  background: rgba(30, 42, 26, 0.94);
+  border-color: rgba(169, 204, 137, 0.8);
+  color: #d7efc0;
+}
+
+.hidden {
+  display: none !important;
+}
+
+.hud-settings-drawer {
+  box-sizing: border-box;
+  top: 62px;
+  right: 16px;
+  width: min(330px, calc(100vw - 32px));
+  max-height: calc(100vh - 220px);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  overflow: hidden;
+  pointer-events: auto;
+  z-index: 30;
+}
+
+.hud-settings-drawer *,
+.hud-settings-drawer *::before,
+.hud-settings-drawer *::after {
+  box-sizing: border-box;
+}
+
+.settings-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid rgba(124, 152, 102, 0.25);
+  flex-shrink: 0;
+}
+
+.settings-tabs {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 5px;
+  flex-shrink: 0;
+}
+
+.settings-tab {
+  pointer-events: auto;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  padding: 6px 4px;
+  border-radius: 4px;
+  border: 1px solid rgba(124, 152, 102, 0.3);
+  background: rgba(24, 30, 22, 0.8);
+  color: #8ca07d;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transition: background 0.15s, border-color 0.15s, color 0.15s;
+}
+
+.settings-tab:hover {
+  background: rgba(45, 58, 40, 0.85);
+  color: #cfe4bd;
+}
+
+.settings-tab.active {
+  background: rgba(93, 122, 72, 0.36);
+  border-color: rgba(155, 195, 122, 0.78);
+  color: #eef7e6;
+}
+
+.settings-content {
+  flex: 1 1 auto;
+  min-width: 0;
+  min-height: 0;
+  overflow-y: auto;
+  padding-right: 4px;
+}
+
+.settings-tab-pane {
+  display: none;
+  min-width: 0;
+}
+
+.settings-tab-pane.active {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.settings-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+}
+
+.settings-group-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid rgba(124, 152, 102, 0.2);
+}
+
+.audio-channels {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  min-width: 0;
+}
+
+.adj-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  min-width: 0;
+  padding: 4px 0;
+}
+
+.adj-label {
+  font-size: 10.5px;
+  color: #b5c7a6;
+}
+
+.settings-close-btn {
+  background: transparent;
+  border: 1px solid rgba(124, 152, 102, 0.35);
+  border-radius: 4px;
+  color: #8ca37c;
+  font-size: 11px;
+  line-height: 1;
+  padding: 4px 7px;
+  cursor: pointer;
+}
+
+.settings-close-btn:hover {
+  background: rgba(124, 152, 102, 0.18);
+  color: #d7efc0;
+}
+
+.mode-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+}
+
+.mode-card {
+  pointer-events: auto;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 8px;
+  text-align: left;
+  font-family: inherit;
+  background: rgba(20, 26, 18, 0.85);
+  border: 1px solid rgba(124, 152, 102, 0.32);
+  border-radius: 5px;
+  color: #c5d4b8;
+  transition: border-color 0.15s, background 0.15s;
+}
+
+.mode-card:hover {
+  background: rgba(34, 44, 30, 0.9);
+  border-color: rgba(147, 189, 115, 0.6);
+}
+
+.mode-card.selected {
+  background: rgba(74, 102, 56, 0.34);
+  border-color: #93bd73;
+  box-shadow: inset 0 0 0 1px rgba(147, 189, 115, 0.35);
+}
+
+.mode-preview {
+  flex-shrink: 0;
+  border-radius: 3px;
+  border: 1px solid rgba(124, 152, 102, 0.4);
+}
+
+.mode-info {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+
+.mode-title {
+  font-size: 10.5px;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  color: #e4f2d8;
+}
+
+.mode-desc {
+  font-size: 9.5px;
+  line-height: 1.3;
+  color: #96a88a;
+}
+
+.mode-apply-btn {
+  pointer-events: auto;
+  cursor: pointer;
+  width: 100%;
+  padding: 7px 10px;
+  font-family: inherit;
+  font-size: 10.5px;
+  font-weight: 800;
+  letter-spacing: 0.8px;
+  border-radius: 4px;
+  border: 1px solid rgba(147, 189, 115, 0.72);
+  background: rgba(93, 122, 72, 0.36);
+  color: #e6f5d8;
+  transition: background 0.15s;
+}
+
+.mode-apply-btn:hover {
+  background: rgba(117, 156, 87, 0.52);
+}
+
+.hud-bottom-right {
+  bottom: 16px;
+  right: 16px;
+  min-width: 310px;
+}
+
+.panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding-bottom: 8px;
+  margin-bottom: 9px;
+  border-bottom: 1px solid rgba(124, 152, 102, 0.25);
+}
+
+.vehicle-tag {
+  font-size: 16px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  color: #a9cc89;
+}
+
+.sub-tag {
+  font-size: 10px;
+  color: #7c8c72;
+  letter-spacing: 0.6px;
+}
+
+.panel-title {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.8px;
+  color: #b5c7a6;
+}
+
+/* Telemetry & Compass */
+.telemetry-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.compass-box {
+  flex-shrink: 0;
+  width: 72px;
+  height: 72px;
+}
+
+.telemetry-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px 14px;
+  flex: 1;
+}
+
+.stat-item {
+  display: flex;
+  flex-direction: column;
+}
+
+.stat-item.full-span {
+  grid-column: span 2;
+}
+
+.stat-label {
+  font-size: 9.5px;
+  color: #7f8e75;
+  letter-spacing: 0.6px;
+}
+
+.stat-value {
+  font-size: 13px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.hull-color {
+  color: #93bd73;
+}
+
+.turret-color {
+  color: #f0b443;
+}
+
+.mono-dim {
+  font-size: 11px;
+  color: #9ba892;
+}
+
+/* Controls Legend */
+.audio-btn {
+  pointer-events: auto;
+  cursor: pointer;
+  background: rgba(93, 122, 72, 0.28);
+  border: 1px solid rgba(145, 180, 118, 0.55);
+  color: #c2dea8;
+  font-family: inherit;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 4px;
+  transition: background 0.15s ease;
+}
+
+.audio-btn:hover {
+  background: rgba(93, 122, 72, 0.45);
+}
+
+.audio-btn.muted {
+  background: rgba(140, 50, 45, 0.35);
+  border-color: rgba(215, 95, 85, 0.55);
+  color: #f0a49e;
+}
+
+.controls-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+
+.ctrl-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  min-width: 0;
+  font-size: 11px;
+  color: #c7d1be;
+}
+
+.ctrl-keys {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+.ctrl-desc {
+  color: #9aa891;
+  text-align: right;
+  white-space: nowrap;
+}
+
+kbd {
+  display: inline-block;
+  min-width: 22px;
+  padding: 1px 5px;
+  text-align: center;
+  font-family: inherit;
+  font-size: 10px;
+  font-weight: 700;
+  color: #e6efe0;
+  background: #232b20;
+  border: 1px solid #4e5f44;
+  border-radius: 3px;
+}
+
+/* Main Cannon & MG Panels */
+.weapon-main-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.ammo-big {
+  font-size: 20px;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  color: #eef5e6;
+}
+
+.ammo-pool {
+  font-size: 11px;
+  color: #9fb094;
+  font-variant-numeric: tabular-nums;
+}
+
+.ammo-pool strong {
+  font-size: 14px;
+  color: #f0f5ea;
+}
+
+.bar-track {
+  width: 100%;
+  height: 7px;
+  background: #1b2119;
+  border: 1px solid rgba(124, 152, 102, 0.28);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.bar-fill {
+  height: 100%;
+  transition: width 0.06s linear;
+}
+
+.cannon-fill {
+  background: linear-gradient(90deg, #759c57, #a7d182);
+}
+
+.mg-block {
+  padding-top: 6px;
+}
+
+.mg-block + .mg-block {
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px dashed rgba(124, 152, 102, 0.22);
+}
+
+.mg-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 5px;
+}
+
+.mg-name {
+  font-size: 11px;
+  font-weight: 700;
+  color: #d6e0cd;
+}
+
+.mg-mag {
+  font-size: 11px;
+  font-weight: 700;
+  color: #b7c4ad;
+  font-variant-numeric: tabular-nums;
+  margin-left: auto;
+}
+
+.heat-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.heat-label {
+  font-size: 9.5px;
+  color: #7f8e75;
+  width: 30px;
+}
+
+.heat-pct {
+  font-size: 10.5px;
+  font-weight: 700;
+  width: 34px;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  color: #b8c7ad;
+}
+
+.heat-fill {
+  background: linear-gradient(90deg, #6ba353, #a8c958);
+}
+
+.heat-fill.heat-warm {
+  background: linear-gradient(90deg, #d99b26, #f2be38);
+}
+
+.heat-fill.heat-critical {
+  background: linear-gradient(90deg, #d94326, #ff5d38);
+}
+
+/* Status Badges */
+.badge {
+  font-size: 9.5px;
+  font-weight: 800;
+  padding: 2px 6px;
+  border-radius: 3px;
+  letter-spacing: 0.5px;
+  font-variant-numeric: tabular-nums;
+}
+
+.badge-ok {
+  background: rgba(93, 153, 66, 0.25);
+  border: 1px solid rgba(128, 199, 96, 0.5);
+  color: #a6e388;
+}
+
+.badge-active {
+  background: rgba(235, 168, 45, 0.25);
+  border: 1px solid rgba(245, 189, 76, 0.55);
+  color: #ffd06b;
+}
+
+.badge-warn {
+  background: rgba(217, 130, 30, 0.25);
+  border: 1px solid rgba(235, 155, 52, 0.55);
+  color: #ffbe66;
+}
+
+.badge-danger {
+  background: rgba(205, 52, 42, 0.3);
+  border: 1px solid rgba(235, 82, 70, 0.65);
+  color: #ff8c82;
+}
+
+/* Audio Mixer & Engine State */
+.audio-mixer {
+  margin-top: 9px;
+  padding-top: 8px;
+  border-top: 1px solid rgba(124, 152, 102, 0.25);
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.engine-state-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 2px;
+}
+
+.engine-btn {
+  pointer-events: auto;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 9.5px;
+  font-weight: 800;
+  padding: 2px 8px;
+  border-radius: 3px;
+  border: 1px solid rgba(128, 199, 96, 0.45);
+  background: rgba(40, 48, 36, 0.85);
+  color: #9eb092;
+  letter-spacing: 0.5px;
+}
+
+.engine-btn.state-idle,
+.engine-btn.state-running {
+  background: rgba(93, 153, 66, 0.28);
+  border-color: rgba(128, 199, 96, 0.6);
+  color: #a6e388;
+}
+
+.engine-btn.state-starting,
+.engine-btn.state-shutdown {
+  background: rgba(217, 130, 30, 0.28);
+  border-color: rgba(235, 155, 52, 0.6);
+  color: #ffbe66;
+}
+
+.slider-row {
+  pointer-events: auto;
+  display: grid;
+  grid-template-columns: 60px minmax(0, 1fr) 34px;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  min-width: 0;
+  font-size: 10px;
+  color: #8c9c82;
+}
+
+.slider-name {
+  white-space: nowrap;
+}
+
+.slider-row input[type="range"] {
+  width: 100%;
+  min-width: 0;
+  margin: 0;
+  accent-color: #85a66d;
+  cursor: pointer;
+  height: 4px;
+}
+
+.slider-val {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  color: #b7c4ad;
+  font-size: 9.5px;
+}
+
+/* X-Ray Inspection Top-Center Banner */
+.hud-top-center {
+  top: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 8px 14px;
+  border-color: rgba(124, 196, 255, 0.55);
+  background: rgba(10, 18, 28, 0.88);
+  text-align: center;
+}
+
+.hud-top-center.hidden {
+  display: none;
+}
+
+.hud-warnings {
+  position: absolute;
+  top: 74px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 6px;
+  max-width: min(640px, calc(100vw - 140px));
+  pointer-events: none;
+}
+
+.warn-pill {
+  font-size: 9.5px;
+  font-weight: 800;
+  letter-spacing: 0.6px;
+  padding: 3px 8px;
+  border-radius: 4px;
+  background: rgba(217, 130, 30, 0.25);
+  border: 1px solid rgba(235, 155, 52, 0.65);
+  color: #ffd07a;
+  backdrop-filter: blur(4px);
+}
+
+.warn-pill.critical {
+  background: rgba(205, 42, 34, 0.36);
+  border-color: rgba(245, 86, 72, 0.78);
+  color: #ff9c92;
+}
+
+.hud-repair-panel {
+  top: 108px;
+  left: 50%;
+  transform: translateX(-50%);
+  min-width: 260px;
+  padding: 8px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.repair-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 14px;
+  font-size: 10px;
+  color: #b5c7a6;
+}
+
+/* Top-Left HUD Flexbox Region (Minimap + Crew/Infantry Stack) */
+.hud-top-left-region {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  max-width: calc(100vw - 88px);
+  min-width: 0;
+  min-height: 0;
+  box-sizing: border-box;
+  pointer-events: none;
+}
+
+.hud-top-left-stack {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+  min-width: 0;
+  min-height: 0;
+  box-sizing: border-box;
+}
+
+/* Compact Top-Left Crew Selection & Dismount Panel (in normal flex flow) */
+.hud-crew-panel {
+  position: relative;
+  min-width: 195px;
+  max-width: 230px;
+  padding: 10px 12px;
+  box-sizing: border-box;
+  pointer-events: auto;
+}
+
+.crew-hold-wrap {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 10px;
+  font-weight: 800;
+  color: #f0b443;
+}
+
+.crew-roster-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.crew-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 3px 6px;
+  border-radius: 3px;
+  border: 1px solid transparent;
+  font-size: 9.5px;
+  color: #a6b898;
+}
+
+.crew-row.selected {
+  background: rgba(117, 156, 87, 0.24);
+  border-color: rgba(147, 189, 115, 0.78);
+  color: #eef5e6;
+}
+
+.crew-row.outside {
+  opacity: 0.62;
+}
+
+.crew-role {
+  font-weight: 700;
+}
+
+.crew-meta {
+  font-size: 9px;
+  font-variant-numeric: tabular-nums;
+  color: #8ea37e;
+}
+
+.hud-infantry-control {
+  position: relative;
+  min-width: 195px;
+  max-width: 230px;
+  padding: 10px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  box-sizing: border-box;
+  pointer-events: auto;
+}
+
+.hud-notice {
+  position: absolute;
+  top: 18px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 5px 12px;
+  border-radius: 4px;
+  background: rgba(20, 24, 18, 0.9);
+  border: 1px solid rgba(240, 180, 67, 0.72);
+  color: #ffd47a;
+  font-size: 10.5px;
+  font-weight: 800;
+  letter-spacing: 0.7px;
+  pointer-events: none;
+}
+
+.xray-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  font-size: 11px;
+  font-weight: 800;
+  color: #7cc4ff;
+  letter-spacing: 0.7px;
+}
+
+.xray-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #2585e8;
+  box-shadow: 0 0 6px #7cc4ff;
+}
+
+.xray-status {
+  margin-top: 3px;
+  font-size: 10px;
+  color: #bfe3ff;
+  letter-spacing: 0.5px;
+}
+
+/* 85mm Shell Selector Pills */
+.ammo-type-row {
+  display: flex;
+  gap: 4px;
+  margin-top: 8px;
+}
+
+.ammo-pill {
+  font-size: 9px;
+  font-weight: 700;
+  padding: 2px 5px;
+  border-radius: 3px;
+  background: #1b2119;
+  border: 1px solid rgba(124, 152, 102, 0.3);
+  color: #829178;
+}
+
+.ammo-pill.active {
+  background: rgba(117, 156, 87, 0.28);
+  border-color: #93bd73;
+  color: #eef5e6;
+}
+
+/* Dev-only Combat Ballistics Debug Panel */
+.combat-debug {
+  bottom: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  min-width: 280px;
+  font-size: 10px;
+  border-color: rgba(240, 180, 67, 0.5);
+  background: rgba(14, 16, 18, 0.9);
+}
+
+.combat-debug.hidden {
+  display: none;
+}
+
+.dbg-title {
+  font-weight: 800;
+  color: #f0b443;
+  margin-bottom: 5px;
+  padding-bottom: 4px;
+  border-bottom: 1px solid rgba(240, 180, 67, 0.25);
+}
+
+.dbg-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  line-height: 1.45;
+  color: #b8c2cc;
+}
+
+.dbg-row strong {
+  color: #f4f6f8;
+  text-align: right;
+}
+
+/* Top-Left Tactical Minimap (in normal Flexbox flow, no absolute positioning) */
+.hud-minimap-panel {
+  position: relative;
+  flex: 0 0 auto;
+  box-sizing: border-box;
+  width: clamp(164px, 12.2vw, 236px);
+  min-width: 0;
+  min-height: 0;
+  padding: 7px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  background: rgba(14, 18, 13, 0.84);
+  border: 1px solid rgba(124, 152, 102, 0.48);
+  pointer-events: auto;
+}
+
+@media (max-height: 780px) {
+  .hud-minimap-panel {
+    width: clamp(150px, 21vh, 210px);
+  }
+}
+
+.minimap-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+}
+
+.minimap-actions {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+}
+
+.minimap-zoom-label {
+  font-size: 9px;
+  font-weight: 700;
+  color: #9eb38e;
+  min-width: 24px;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+
+.minimap-btn {
+  width: 17px;
+  height: 17px;
+  padding: 0;
+  border-radius: 3px;
+  border: 1px solid rgba(124, 152, 102, 0.42);
+  background: rgba(27, 34, 24, 0.9);
+  color: #cddbc2;
+  font-size: 10px;
+  font-weight: 800;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.minimap-btn:hover {
+  background: rgba(65, 88, 52, 0.85);
+  color: #eef5e6;
+}
+
+#minimap-canvas {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1 / 1;
+  display: block;
+  border-radius: 3px;
+  border: 1px solid rgba(124, 152, 102, 0.35);
+}
+
+.hud-minimap-panel.collapsed #minimap-canvas {
+  display: none;
+}
+
+/* =========================================================================
+   Reinforcement Request Modal & Tactical Radio Banner
+   ========================================================================= */
+.reinf-menu {
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: min(440px, 90vw);
+  background: rgba(16, 21, 15, 0.94);
+  border: 1px solid rgba(138, 168, 114, 0.55);
+  border-radius: 6px;
+  padding: 12px 14px;
+  box-shadow: 0 12px 34px rgba(0, 0, 0, 0.65);
+  pointer-events: auto;
+  z-index: 45;
+  color: #dce6d2;
+  font-family: inherit;
+}
+
+.reinf-menu.hidden {
+  display: none;
+}
+
+.reinf-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 8px;
+  margin-bottom: 10px;
+  border-bottom: 1px solid rgba(124, 152, 102, 0.3);
+}
+
+.reinf-title {
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  color: #e8f0df;
+}
+
+.reinf-cooldown {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  padding: 2px 7px;
+  border-radius: 3px;
+  background: rgba(65, 102, 52, 0.45);
+  border: 1px solid rgba(124, 178, 98, 0.5);
+  color: #b7e39c;
+}
+
+.reinf-cooldown.busy {
+  background: rgba(120, 82, 32, 0.5);
+  border-color: rgba(232, 178, 76, 0.55);
+  color: #f3cc78;
+}
+
+.reinf-options {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.reinf-option {
+  width: 100%;
+  text-align: left;
+  padding: 10px 12px;
+  border-radius: 4px;
+  border: 1px solid rgba(124, 152, 102, 0.38);
+  background: rgba(27, 34, 24, 0.85);
+  color: #dce6d2;
+  cursor: pointer;
+  transition: background 120ms ease, border-color 120ms ease, transform 90ms ease;
+}
+
+.reinf-option:hover,
+.reinf-option.selected {
+  background: rgba(66, 94, 52, 0.85);
+  border-color: rgba(182, 224, 146, 0.85);
+  box-shadow: 0 0 0 1px rgba(182, 224, 146, 0.35);
+}
+
+.reinf-option.disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.reinf-option.disabled:hover {
+  background: rgba(48, 36, 28, 0.78);
+  border-color: rgba(206, 134, 82, 0.65);
+}
+
+.reinf-opt-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+
+.reinf-opt-name {
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  color: #f0f6e8;
+}
+
+.reinf-opt-badge {
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  padding: 2px 6px;
+  border-radius: 3px;
+  background: rgba(56, 96, 48, 0.6);
+  color: #bce8a2;
+}
+
+.reinf-option.disabled .reinf-opt-badge {
+  background: rgba(120, 74, 34, 0.65);
+  color: #f3c478;
+}
+
+.reinf-opt-desc {
+  font-size: 10.5px;
+  color: #a9b89c;
+  line-height: 1.35;
+}
+
+.reinf-footer {
+  margin-top: 10px;
+  padding-top: 7px;
+  border-top: 1px solid rgba(124, 152, 102, 0.25);
+  font-size: 10px;
+  letter-spacing: 0.05em;
+  color: #93a487;
+  text-align: center;
+}
+
+.reinf-banner {
+  position: fixed;
+  top: 74px;
+  left: 50%;
+  transform: translateX(-50%);
+  min-width: 280px;
+  max-width: 480px;
+  padding: 7px 14px;
+  border-radius: 4px;
+  background: rgba(16, 22, 15, 0.9);
+  border: 1px solid rgba(132, 174, 104, 0.6);
+  text-align: center;
+  pointer-events: none;
+  z-index: 40;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.5);
+}
+
+.reinf-banner.hidden {
+  display: none;
+}
+
+.reinf-banner.tone-success {
+  border-color: rgba(126, 214, 118, 0.78);
+}
+
+.reinf-banner.tone-warn {
+  border-color: rgba(235, 182, 74, 0.8);
+}
+
+.reinf-banner.tone-danger {
+  border-color: rgba(224, 88, 76, 0.85);
+}
+
+.reinf-banner-title {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  color: #e9f2df;
+}
+
+.reinf-banner-sub {
+  font-size: 10px;
+  color: #b4c4a8;
+  margin-top: 2px;
+}
+
+/* =========================================================================
+   Friendly Fire Contextual Warning Toast
+   ========================================================================= */
+.ff-toast {
+  position: fixed;
+  top: 124px;
+  left: 50%;
+  transform: translateX(-50%);
+  min-width: 240px;
+  max-width: 440px;
+  padding: 6px 14px;
+  border-radius: 4px;
+  background: rgba(34, 16, 14, 0.92);
+  border: 1px solid rgba(232, 138, 62, 0.85);
+  text-align: center;
+  pointer-events: none;
+  z-index: 42;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.55);
+}
+
+.ff-toast.hidden {
+  display: none;
+}
+
+.ff-toast.kill {
+  border-color: rgba(235, 76, 66, 0.92);
+  background: rgba(44, 14, 14, 0.94);
+}
+
+.ff-toast-title {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  color: #ffcf87;
+}
+
+.ff-toast.kill .ff-toast-title {
+  color: #ff9c94;
+}
+
+.ff-toast-detail {
+  font-size: 10px;
+  color: #f0d7cc;
+  margin-top: 2px;
+}
+
+/* =========================================================================
+   Soviet Infantry Squad Selection & Attack Command HUD
+   ========================================================================= */
+.hud-infantry-cmd-wrap {
+  position: fixed;
+  bottom: 14px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  z-index: 25;
+  pointer-events: none;
+}
+
+.hud-infantry-cmd-wrap > * {
+  pointer-events: auto;
+}
+
+.inf-cmd-toggle-btn {
+  padding: 5px 12px;
+  border-radius: 4px;
+  border: 1px solid rgba(124, 152, 102, 0.52);
+  background: rgba(18, 24, 16, 0.88);
+  color: #cfe0be;
+  font-family: inherit;
+  font-size: 10.5px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  cursor: pointer;
+  transition: background 120ms ease, border-color 120ms ease;
+}
+
+.inf-cmd-toggle-btn:hover {
+  background: rgba(44, 62, 36, 0.92);
+  border-color: rgba(154, 196, 124, 0.8);
+}
+
+.inf-cmd-toggle-btn.active {
+  background: rgba(46, 98, 62, 0.94);
+  border-color: rgba(124, 232, 162, 0.92);
+  color: #e9fff1;
+  box-shadow: 0 0 10px rgba(92, 224, 152, 0.35);
+}
+
+.hud-infantry-cmd-panel {
+  position: relative;
+  width: min(330px, 86vw);
+  padding: 8px 11px;
+}
+
+.hud-infantry-cmd-panel.hidden {
+  display: none;
+}
+
+.inf-cmd-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3px 10px;
+  font-size: 10.5px;
+  color: #b7c6a9;
+  margin-top: 4px;
+}
+
+.inf-cmd-grid strong {
+  color: #eef6e6;
+}
+
+.inf-cmd-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  margin-top: 6px;
+  padding-top: 5px;
+  border-top: 1px solid rgba(124, 152, 102, 0.24);
+}
+
+.inf-cmd-hint {
+  font-size: 9px;
+  color: #93a684;
+}
+
+.inf-cmd-clear-btn {
+  padding: 2px 7px;
+  border-radius: 3px;
+  border: 1px solid rgba(140, 164, 120, 0.45);
+  background: rgba(30, 38, 26, 0.9);
+  color: #d6e2ca;
+  font-size: 9px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.inf-cmd-clear-btn:hover {
+  background: rgba(74, 52, 42, 0.9);
+  border-color: rgba(224, 128, 106, 0.75);
+}
+
+.inf-cmd-confirm {
+  padding: 4px 12px;
+  border-radius: 3px;
+  background: rgba(42, 84, 52, 0.92);
+  border: 1px solid rgba(132, 232, 166, 0.8);
+  color: #e8ffef;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+}
+
+.inf-cmd-confirm.hidden {
+  display: none;
+}
+
+.ammo-type-row,
+.ammo-pill {
+  pointer-events: auto;
+}
+
+.ammo-pill {
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.ammo-pill.ammo-he.active {
+  background: rgba(154, 86, 28, 0.78);
+  border-color: rgba(245, 168, 72, 0.92);
+  color: #fff2d6;
+}
+
+.ammo-pill.loaded-ring {
+  box-shadow: inset 0 0 0 1px rgba(152, 232, 168, 0.7);
+}
+
+.ammo-pill:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}

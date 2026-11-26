@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 46 38" width="46" height="38">
+  <!-- Prone / Neutralized Soldier (Feldgrau + Stahlhelm + Kar98k resting beside) -->
+  <g opacity="0.72">
+    <!-- Legs & boots -->
+    <rect x="6" y="14" width="12" height="4.2" rx="1.6" fill="#4e574a" stroke="#1d221b" stroke-width="0.8"/>
+    <rect x="6" y="19.8" width="12" height="4.2" rx="1.6" fill="#4e574a" stroke="#1d221b" stroke-width="0.8"/>
+    <rect x="3.5" y="14.3" width="3.5" height="3.2" rx="1" fill="#232220"/>
+    <rect x="3.5" y="20.2" width="3.5" height="3.2" rx="1" fill="#232220"/>
+
+    <!-- Torso -->
+    <ellipse cx="22" cy="19" rx="8.5" ry="6.2" fill="#545e50" stroke="#1d221b" stroke-width="0.9"/>
+
+    <!-- Dropped Kar98k -->
+    <line x1="20" y1="27" x2="34" y2="29" stroke="#5c4028" stroke-width="2" stroke-linecap="round"/>
+    <line x1="30" y1="28.3" x2="39" y2="29.8" stroke="#262a2d" stroke-width="1.2" stroke-linecap="round"/>
+
+    <!-- Tilted Stahlhelm -->
+    <ellipse cx="32" cy="18.5" rx="5.2" ry="4.8" fill="#4b5347" stroke="#191e17" stroke-width="0.9"/>
+  </g>
+</svg>
